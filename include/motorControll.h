@@ -21,12 +21,12 @@ extern sensors_event_t event;
 
 #define PULSES_PER_REV 205
 #define WHEEL_DIAMETER 3.8
-#define oneCell 13.5
+#define oneCell 12.9
 
 extern double distance;
 
 extern double Kp, Ki, Kd;
-extern double targetAngleX , integral, prevT , lastError ;
+extern double targetAngleX , integral, prevT , lastError, lastErrorAngle;
 extern double errorAngle;
 extern double currentAngle;
 
@@ -47,6 +47,8 @@ void motorBackwards(int speed1, int speed2);
 double normalization(double x);
 
 void goStraight(double s);
+
+void moveFoward();
 
 void turnRight(double angleset);
 

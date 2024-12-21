@@ -7,7 +7,6 @@
 #include "encoder.h"
 #include <queue>
 
-#define oneCell 13.5
 const int dx[] = {0, -1, 0, 1};
 const int dy[] = {1, 0, -1, 0};
 
@@ -28,7 +27,8 @@ const int dy[] = {1, 0, -1, 0};
 #define MAZESIDE_SIZE 6
 
 #define START_DIR DIR_UP
-
+#define x_end 4
+#define y_end 4
 /* End parameters to change */
 
 #define INF 99
@@ -36,6 +36,7 @@ typedef unsigned char u8;
 typedef unsigned int u32;
 
 #define dir_change(x, y) (x + y) % 4
+
 void setup()
 {
     Serial.begin(9600);
@@ -49,6 +50,7 @@ void setup()
 
     delay(500);
     bno.setExtCrystalUse(true);
+    pinMode(2, OUTPUT);
 
     pinMode(in1, OUTPUT);
     pinMode(in2, OUTPUT);
@@ -137,7 +139,8 @@ void floodfillToCenter()
     // }
     
     // Đặt ô mục tiêu
-    q.push(std::make_pair(4, 4));
+    q.push(std::make_pair(x_end, y_end));
+    maze[x_end][y_end].distance_to_dest = 0;
     while (!q.empty())
     {
         auto u = q.front();
@@ -181,7 +184,11 @@ void floodfillToSource()
 
 bool checkFinish(u8 destination)
 {
-    return (destination == DEST_CENTER && MAZESIDE_SIZE / 2 - 1 <= m_x && m_x <= MAZESIDE_SIZE / 2 && MAZESIDE_SIZE / 2 - 1 <= m_y && m_y <= MAZESIDE_SIZE / 2) || (destination == DEST_SOURCE && m_x == 0 && m_y == 0);
+    // return (destination == DEST_CENTER 
+    // && MAZESIDE_SIZE / 2 - 1 <= m_x && m_x <= MAZESIDE_SIZE / 2 
+    // && MAZESIDE_SIZE / 2 - 1 <= m_y && m_y <= MAZESIDE_SIZE / 2) 
+    // || (destination == DEST_SOURCE && m_x == 0 && m_y == 0);
+    return (destination == DEST_CENTER && m_x == x_end && m_y == x_end);
 }
 
 
@@ -290,7 +297,12 @@ void control()
     }
     if (command == 2)
     {
-        turnLeft(180);
+        turnLeft(90);
+        turnLeft(90);
+        motorBackwards(70, 70);
+        delay(500);
+        motor_stop();
+        delay(100);
         goStraight(oneCell);
     }
     if (command == 3)
@@ -314,4 +326,9 @@ void loop()
     {
         control();
     }
+
+    // digitalWrite(2, HIGH);
+    // delay(500);
+    // digitalWrite(2, LOW);
+    // delay(500);
 }

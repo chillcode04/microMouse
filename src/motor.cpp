@@ -77,13 +77,13 @@ void motorBackwards(int speed1, int speed2)
 }
 void goStraight(double s)
 {
-    xung_right = 0;
-    xung_left = 0;
+    EnRight = 0;
+    EnLeft = 0;
     distance = 0;
     double speed = 100;
     while (distance < s && speed > 10)
     {
-        distance = (float)(xung_right + xung_left) / 2 * (WHEEL_DIAMETER * M_PI / PULSES_PER_REV);
+        distance = (float)(EnRight + EnLeft) / 2 * (WHEEL_DIAMETER * M_PI / PULSES_PER_REV);
         if (abs(distance - s) < 0.35 * s)
             speed = speed - 1.3;
         bno.getEvent(&event);
@@ -117,12 +117,12 @@ void goStraight(double s)
 
 void turnRight(double angleSet)
 {
-    xung_right = 0;
+    EnRight = 0;
     double steps = angleSet * 1.2;
     double speed = 75;
-    while (xung_right <= steps && speed > 10)
+    while (EnRight <= steps && speed > 10)
     {
-        if (steps - xung_right < 35)
+        if (steps - EnRight < 35)
         {
             speed = speed - 1;
         }
@@ -136,12 +136,12 @@ void turnRight(double angleSet)
 
 void turnLeft(double angleSet)
 {
-    xung_right = 0;
+    EnRight = 0;
     double steps = angleSet * 1.2 + 20;
     double speed = 75;
-    while (xung_right <= steps && speed > 10)
+    while (EnRight <= steps && speed > 10)
     {
-        if (steps - xung_right < 40)
+        if (steps - EnRight < 40)
         {
             speed = speed - 1.55;
         }

@@ -2,7 +2,7 @@
 #define ENCODER_H
 
 #include <Arduino.h>
-extern int xung_right, xung_left ;
+extern int EnRight, EnLeft;
 
 void encoderRight();
 void encoderLeft();
