@@ -299,7 +299,7 @@ void control()
     {
         turnLeft(90);
         turnLeft(90);
-        motorBackwards(70, 70);
+        motorBackwards(100, 100);
         delay(500);
         motor_stop();
         delay(100);
@@ -326,9 +326,4 @@ void loop()
     {
         control();
     }
-
-    // digitalWrite(2, HIGH);
-    // delay(500);
-    // digitalWrite(2, LOW);
-    // delay(500);
 }

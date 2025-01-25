@@ -16,7 +16,7 @@ extern sensors_event_t event;
 #define ena1 25
 #define ena2 32
 
-#define MAX_SPEED 255
+#define MAX_SPEED 200
 #define MIN_SPEED 0
 
 #define PULSES_PER_REV 205
@@ -48,7 +48,7 @@ double normalization(double x);
 
 void goStraight(double s);
 
-void moveFoward();
+void moveFoward(double s);
 
 void turnRight(double angleset);
 

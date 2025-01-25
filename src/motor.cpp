@@ -4,12 +4,15 @@
 Adafruit_BNO055 bno = Adafruit_BNO055(55, 0x29, &Wire);
 sensors_event_t event;
 
-double distance = 0;
+#define TIME_DELAY 500
 
+double distance = 0;
 double Kp = 3.45, Ki = 0.09, Kd = 1;
-double targetAngleX = 0, integral = 0, prevT = 0, lastError = 0;
-double errorAngle;
+double targetAngleX = 0, integral = 0, prevT = 0;
+double lastErrorAngle = 0, lastErrorEncoder = 0, lastError = 0;
+double errorAngle, errorEncoder = 0;
 double currentAngle;
+double leftMotorSpeed, rightMotorSpeed;
 
 double normalization(double x)
 {
@@ -117,38 +120,50 @@ void goStraight(double s)
 
 void turnRight(double angleSet)
 {
-    EnRight = 0;
+    EnRight = 0, EnLeft = 0;
     double steps = angleSet * 1.2;
     double speed = 75;
     while (EnRight <= steps && speed > 10)
     {
         if (steps - EnRight < 35)
         {
-            speed = speed - 1;
+            speed = speed - 2.5;
         }
-        rightBackwards(speed);
-        leftForward(speed);
+
+        errorEncoder = EnRight - EnLeft;
+        double offsetSpeed = 2 * errorEncoder;
+
+        leftMotorSpeed = constrain(speed + offsetSpeed, MIN_SPEED, MAX_SPEED);
+        rightMotorSpeed = constrain(speed - offsetSpeed, MIN_SPEED, MAX_SPEED);
+
+        rightBackwards(rightMotorSpeed);
+        leftForward(leftMotorSpeed);
     }
     motor_stop();
     targetAngleX = normalization(targetAngleX + angleSet);
-    delay(500);
+    delay(TIME_DELAY);
 }
-
 void turnLeft(double angleSet)
 {
-    EnRight = 0;
+    EnRight = 0, EnLeft = 0;
     double steps = angleSet * 1.2 + 20;
     double speed = 75;
     while (EnRight <= steps && speed > 10)
     {
-        if (steps - EnRight < 40)
+        if (steps - EnRight < 50)
         {
-            speed = speed - 1.55;
+            speed = speed - 10;
         }
-        leftBackwards(speed);
-        rightForward(speed);
+        errorEncoder = EnRight - EnLeft;
+        double offsetSpeed = 2 * errorEncoder;
+
+        leftMotorSpeed = constrain(speed + offsetSpeed, MIN_SPEED, MAX_SPEED);
+        rightMotorSpeed = constrain(speed - offsetSpeed, MIN_SPEED, MAX_SPEED);
+
+        leftBackwards(leftMotorSpeed);
+        rightForward(rightMotorSpeed);
     }
     motor_stop();
     targetAngleX = normalization(targetAngleX - angleSet);
-    delay(500);
+    delay(TIME_DELAY);
 }
