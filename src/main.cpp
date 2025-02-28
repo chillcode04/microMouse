@@ -24,9 +24,9 @@ const int dy[] = {1, 0, -1, 0};
 #define DEST_CENTER 0
 #define DEST_SOURCE 1
 
-#define MAZESIDE_SIZE 6
+#define MAZESIDE_SIZE 16
 
-#define START_DIR DIR_UP
+#define START_DIR DIR_LEFT
 #define x_end 4
 #define y_end 4
 /* End parameters to change */
@@ -98,8 +98,8 @@ void initFloodfill()
 {
     m_dir = START_DIR;
     m_destination = DEST_CENTER;
-    m_x = 0;
-    m_y = 0;
+    m_x = 7;
+    m_y = 7;
     for (int i = 0; i < MAZESIDE_SIZE; i++)
     {
         for (int j = 0; j < MAZESIDE_SIZE; j++)
@@ -129,18 +129,18 @@ void floodfillToCenter()
             maze[i][j].distance_to_dest = INF;
         }
     }
-    // for (u8 i = MAZESIDE_SIZE / 2 - 1; i <= MAZESIDE_SIZE / 2; i++)
-    // {
-    //     for (u8 j = MAZESIDE_SIZE / 2 - 1; j <= MAZESIDE_SIZE / 2; j++)
-    //     {
-    //         maze[i][j].distance_to_dest = 0;
-    //         q.push(std::make_pair(i, j));
-    //     }
-    // }
+    for (u8 i = MAZESIDE_SIZE / 2 - 1; i <= MAZESIDE_SIZE / 2; i++)
+    {
+        for (u8 j = MAZESIDE_SIZE / 2 - 1; j <= MAZESIDE_SIZE / 2; j++)
+        {
+            maze[i][j].distance_to_dest = 0;
+            q.push(std::make_pair(i, j));
+        }
+    }
     
     // Đặt ô mục tiêu
-    q.push(std::make_pair(x_end, y_end));
-    maze[x_end][y_end].distance_to_dest = 0;
+    // q.push(std::make_pair(x_end, y_end));
+    //maze[x_end][y_end].distance_to_dest = 0;
     while (!q.empty())
     {
         auto u = q.front();
@@ -184,11 +184,11 @@ void floodfillToSource()
 
 bool checkFinish(u8 destination)
 {
-    // return (destination == DEST_CENTER 
-    // && MAZESIDE_SIZE / 2 - 1 <= m_x && m_x <= MAZESIDE_SIZE / 2 
-    // && MAZESIDE_SIZE / 2 - 1 <= m_y && m_y <= MAZESIDE_SIZE / 2) 
-    // || (destination == DEST_SOURCE && m_x == 0 && m_y == 0);
-    return (destination == DEST_CENTER && m_x == x_end && m_y == x_end);
+    return (destination == DEST_CENTER 
+    && MAZESIDE_SIZE / 2 - 1 <= m_x && m_x <= MAZESIDE_SIZE / 2 
+    && MAZESIDE_SIZE / 2 - 1 <= m_y && m_y <= MAZESIDE_SIZE / 2) 
+    || (destination == DEST_SOURCE && m_x == 0 && m_y == 0);
+    //return (destination == DEST_CENTER && m_x == x_end && m_y == x_end);
 }
 
 
