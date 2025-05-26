@@ -4,7 +4,7 @@
 - N20 motor x2  
 - BNO055  
 - IR Sensor  
-- DVR883
+- DRV883
 ## Videos
 Test Maze Run (youtube)
 https://youtube.com/shorts/nZOW91wdDVQ?feature=share  
